@@ -1,0 +1,34 @@
+# /*
+#  * File: serverless.yml
+#  * Project: HxServices
+#  * 
+#  * Author: Blake Schwendiman
+#  * Copyright © 2020 DigitalHamlet, LLC. All Rights Reserved.
+#  */
+
+service: piccolo-redir
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  customDomain:
+    domainName: scan.piccolo.mobi
+    basePath: ''
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+         path: '{proxy+}'
+         method: get
+      - http:
+         path: '/'
+         method: get
